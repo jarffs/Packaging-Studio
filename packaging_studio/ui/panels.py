@@ -47,6 +47,18 @@ class PACKAGING_PT_main(bpy.types.Panel):
             gen.label(text=f"Panels: {props.panel_count}")
 
         if props.box_collection:
+            finish = layout.box()
+            header = finish.row(align=True)
+            header.label(text="Finishing (SubD)", icon="MOD_SUBSURF")
+            header.prop(props, "subd_enable", text="")
+            col = finish.column(align=True)
+            col.enabled = props.subd_enable
+            col.prop(props, "subd_level")
+            col.prop(props, "support_width")
+            col.prop(props, "support_loops")
+            col.prop(props, "crease_sharpness")
+
+        if props.box_collection:
             anim = layout.box()
             anim.label(text="Animation", icon="ARMATURE_DATA")
 

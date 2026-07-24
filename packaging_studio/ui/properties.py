@@ -5,6 +5,23 @@ from __future__ import annotations
 import bpy
 
 
+def _sync_finish(self, context):
+    """Push the SubD finishing sliders onto every panel modifier live."""
+    collection = bpy.data.collections.get(self.box_collection)
+    if collection is None:
+        return
+    from ..mesh.geometry_nodes import sync_collection
+
+    sync_collection(
+        collection,
+        enable=self.subd_enable,
+        level=self.subd_level,
+        width=self.support_width,
+        loops=self.support_loops,
+        crease=self.crease_sharpness,
+    )
+
+
 class PackagingStudioProperties(bpy.types.PropertyGroup):
     source_file: bpy.props.StringProperty(name="Source", default="")
     source_path: bpy.props.StringProperty(name="Source path", default="", subtype="FILE_PATH")
@@ -68,5 +85,48 @@ class PackagingStudioProperties(bpy.types.PropertyGroup):
             ("BOUNCE", "Bounce", "Bounce at the end"),
         ],
         default="SMOOTH",
+    )
+
+    subd_enable: bpy.props.BoolProperty(
+        name="SubD Finish",
+        description="Non-destructive Subdivision Surface finish with support loops",
+        default=True,
+        update=_sync_finish,
+    )
+    subd_level: bpy.props.IntProperty(
+        name="SubD Level",
+        description="Subdivision Surface level applied by the finishing modifier",
+        default=2,
+        min=0,
+        soft_max=4,
+        max=6,
+        update=_sync_finish,
+    )
+    support_width: bpy.props.FloatProperty(
+        name="Support Width",
+        description="Distance of the crease support loops (holds the fold sharp)",
+        default=0.0006,
+        min=0.0,
+        soft_max=0.005,
+        max=0.02,
+        subtype="DISTANCE",
+        update=_sync_finish,
+    )
+    support_loops: bpy.props.IntProperty(
+        name="Support Loops",
+        description="How many support loops the bevel adds along each crease",
+        default=1,
+        min=1,
+        max=4,
+        update=_sync_finish,
+    )
+    crease_sharpness: bpy.props.FloatProperty(
+        name="Crease Sharpness",
+        description="Extra SubD edge crease on the fold edges (0 = off)",
+        default=0.0,
+        min=0.0,
+        max=1.0,
+        subtype="FACTOR",
+        update=_sync_finish,
     )
 

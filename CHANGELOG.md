@@ -5,6 +5,25 @@ Todas as mudanças notáveis deste projeto são documentadas aqui.
 O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)
 e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [0.4.0] - 2026-07-25
+
+### Added
+- **Acabamento não-destrutivo com Subdivision Surface (Geometry Nodes)**: novo
+  node group `PS_SubD_Support`, aplicado como modificador `PS Finish` em cada
+  painel. Ele bisela as arestas de vinco (`ps_fold`) para gerar **loops de
+  sustentação** e então aplica Subdivision Surface — os loops só existem dentro
+  do modificador, a malha base continua plana e editável.
+- **Sliders paramétricos** no painel lateral (seção "Finishing (SubD)"): ligar/
+  desligar o acabamento, nível de SubD, largura da sustentação, número de loops
+  e nitidez de vinco — todos atualizam todos os painéis ao vivo.
+- `mesh/geometry_nodes.py`: constrói/gerencia o node group e sincroniza os
+  valores na coleção da caixa.
+
+### Notes
+- No Blender 5.2 o modificador de Nodes deixou de expor inputs por IDProperty
+  ao Python; os parâmetros são dirigidos por nós de valor internos do grupo
+  compartilhado (todos os painéis compartilham o mesmo acabamento).
+
 ## [0.3.2] - 2026-07-25
 
 ### Added
@@ -120,6 +139,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Scaffolding inicial do addon: `__init__.py`, `blender_manifest.toml`,
   estrutura de diretórios e `build.py`.
 
+[0.4.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.4.0
 [0.3.2]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.3.2
 [0.3.1]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.3.1
 [0.3.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.3.0
