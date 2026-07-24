@@ -14,8 +14,12 @@ from typing import Dict, List
 from .types import FoldJoint, PanelModel, Topology
 
 
-def build_topology(model: PanelModel) -> Topology:
-    """Return the fold :class:`Topology` for a :class:`PanelModel`."""
+def build_topology(model: PanelModel, root: int = None) -> Topology:
+    """Return the fold :class:`Topology` for a :class:`PanelModel`.
+
+    ``root`` optionally forces which panel stays static (the base). When it is
+    ``None`` or not a valid panel index, the largest-area panel is used.
+    """
     panels = model.panels
     if not panels:
         return Topology(root=-1, joints=[], adjacency={})
@@ -23,7 +27,9 @@ def build_topology(model: PanelModel) -> Topology:
     edge_to_panels = _edge_to_panels(panels)
     adjacency = _build_adjacency(panels, model.fold_edges, edge_to_panels)
 
-    root = max(panels, key=lambda p: p.area).index
+    valid = {p.index for p in panels}
+    if root not in valid:
+        root = max(panels, key=lambda p: p.area).index
     joints = _bfs_joints(root, adjacency, model)
     return Topology(root=root, joints=joints, adjacency=adjacency)
 

@@ -11,7 +11,7 @@ from __future__ import annotations
 bl_info = {
     "name": "Packaging Studio",
     "author": "jarffs",
-    "version": (0, 3, 0),
+    "version": (0, 3, 1),
     "blender": (4, 2, 0),
     "location": "File > Import > Dieline (SVG/PDF); View3D > Sidebar > Packaging",
     "description": "Turn packaging dielines into render-ready 3D models",
@@ -32,6 +32,8 @@ def register():
         properties.PackagingStudioProperties,
         import_dieline.PACKAGING_OT_import_dieline,
         generate_3d.PACKAGING_OT_generate_3d,
+        animate_fold.PACKAGING_OT_set_fold_base,
+        animate_fold.PACKAGING_OT_clear_fold_base,
         animate_fold.PACKAGING_OT_animate_fold,
         panels.PACKAGING_PT_main,
     ]

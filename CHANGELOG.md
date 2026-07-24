@@ -5,6 +5,18 @@ Todas as mudanças notáveis deste projeto são documentadas aqui.
 O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)
 e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [0.3.1] - 2026-07-24
+
+### Added
+- Seleção do **painel base** (estático) para a animação: escolha um painel no
+  viewport e clique em "Set Base from Selection" para re-enraizar o rig — esse
+  painel fica parado e todos os outros dobram a partir dele. Botão "Auto Base"
+  volta à escolha automática (maior painel).
+- `build_topology(model, root=...)` aceita uma raiz explícita (fallback para o
+  maior painel quando inválida).
+- `armature.rebuild_bones()` re-enraíza a armature existente sem recriar as
+  malhas (mantém os nomes dos bones e os vertex groups).
+
 ## [0.3.0] - 2026-07-24
 
 ### Added
@@ -97,6 +109,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Scaffolding inicial do addon: `__init__.py`, `blender_manifest.toml`,
   estrutura de diretórios e `build.py`.
 
+[0.3.1]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.3.1
 [0.3.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.3.0
 [0.2.3]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.2.3
 [0.2.2]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.2.2

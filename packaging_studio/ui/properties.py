@@ -29,6 +29,11 @@ class PackagingStudioProperties(bpy.types.PropertyGroup):
     )
     panel_count: bpy.props.IntProperty(name="Panels", default=0)
     box_collection: bpy.props.StringProperty(name="Box collection", default="")
+    fold_root_panel: bpy.props.IntProperty(
+        name="Base Panel",
+        description="Panel index that stays static; -1 uses the largest panel",
+        default=-1,
+    )
 
     fold_angle_deg: bpy.props.FloatProperty(
         name="Fold Angle",
