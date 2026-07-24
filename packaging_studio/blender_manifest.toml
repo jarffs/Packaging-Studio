@@ -1,0 +1,27 @@
+schema_version = "1.0.0"
+
+id = "packaging_studio"
+version = "0.2.3"
+name = "Packaging Studio"
+tagline = "Turn packaging dielines into render-ready 3D models"
+maintainer = "jarffs"
+type = "add-on"
+
+website = "https://github.com/jarffs/Packaging-Studio"
+
+tags = ["Import-Export", "3D View", "Modeling"]
+
+blender_version_min = "4.2.0"
+
+license = [
+  "SPDX:GPL-3.0-or-later",
+]
+
+# SVG import works with the standard library alone. PDF import uses PyMuPDF,
+# bundled below as a wheel (abi3 wheel is compatible with Blender's Python).
+wheels = [
+  "./wheels/pymupdf-1.28.0-cp310-abi3-win_amd64.whl",
+]
+
+[permissions]
+files = "Import packaging dielines from local SVG/PDF files"

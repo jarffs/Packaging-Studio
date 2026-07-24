@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Simplified tuck-end style dieline for testing Packaging Studio.
+  Coordinates are in millimeters (user units).
+
+    - Outer contour (closed path)  -> CUT
+    - Vertical panel dividers       -> FOLD
+    - Glue-flap crease near left     -> GLUE_FLAP
+    - Dashed horizontal crease       -> SCORE
+    - Small inner rectangle          -> WINDOW
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="200mm" height="100mm" viewBox="0 0 200 100">
+  <g id="dieline" fill="none" stroke="#000000" stroke-width="0.25">
+
+    <!-- Outer cut contour -->
+    <path id="outline"
+          d="M0,0 L200,0 L200,100 L0,100 Z"/>
+
+    <!-- Panel divider fold lines -->
+    <line id="fold-1" x1="50"  y1="0" x2="50"  y2="100"/>
+    <line id="fold-2" x1="100" y1="0" x2="100" y2="100"/>
+    <line id="fold-3" x1="150" y1="0" x2="150" y2="100"/>
+
+    <!-- Glue-flap crease running parallel and close to the left edge -->
+    <line id="glue" x1="6" y1="8" x2="6" y2="92"/>
+
+    <!-- Dashed score / perforation line -->
+    <line id="score" x1="20" y1="50" x2="180" y2="50"
+          stroke-dasharray="3 2"/>
+
+    <!-- Window cut-out -->
+    <rect id="window" x="70" y="35" width="30" height="20"/>
+
+  </g>
+</svg>
