@@ -62,6 +62,7 @@ class PACKAGING_OT_generate_3d(bpy.types.Operator):
         props.panel_count = len(model.panels)
         props.box_collection = box.name
         props.fold_root_panel = -1
+        _apply_finish(box, props)
         _show_relationship_lines(context)
         self.report(
             {"INFO"},
@@ -79,3 +80,17 @@ def _show_relationship_lines(context):
         for space in area.spaces:
             if space.type == "VIEW_3D":
                 space.overlay.show_relationship_lines = True
+
+
+def _apply_finish(box, props):
+    """Sync the SubD finishing sliders onto the freshly built panels."""
+    from ..mesh.geometry_nodes import sync_collection
+
+    sync_collection(
+        box,
+        enable=props.subd_enable,
+        level=props.subd_level,
+        width=props.support_width,
+        loops=props.support_loops,
+        crease=props.crease_sharpness,
+    )
