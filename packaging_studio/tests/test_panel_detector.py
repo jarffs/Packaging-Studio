@@ -146,5 +146,19 @@ class TopologyTests(unittest.TestCase):
         self.assertEqual(topo.joints, [])
 
 
+class EdgeCodeTests(unittest.TestCase):
+    def test_fold_and_cut_codes_are_disjoint(self):
+        from packaging_studio.utils.constants import CUT_EDGE_CODES, FOLD_EDGE_CODES
+
+        self.assertFalse(FOLD_EDGE_CODES & CUT_EDGE_CODES)
+        self.assertNotIn(0, FOLD_EDGE_CODES | CUT_EDGE_CODES)
+
+    def test_codes_cover_all_line_types(self):
+        from packaging_studio.utils.constants import EDGE_TYPE_CODES
+
+        for line_type in LineType:
+            self.assertIn(line_type.value, EDGE_TYPE_CODES)
+
+
 if __name__ == "__main__":
     unittest.main()

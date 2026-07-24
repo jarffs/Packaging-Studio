@@ -26,6 +26,35 @@ LINE_COLORS = {
     LineType.UNKNOWN: (0.5, 0.5, 0.5, 1.0),    # gray
 }
 
+# Integer codes written to the ``ps_edge_type`` mesh attribute (edge domain) so
+# Geometry Nodes can select creases/cuts non-destructively. ``0`` means an
+# internal edge that carries no dieline classification (e.g. Solidify walls).
+EDGE_TYPE_CODES = {
+    LineType.UNKNOWN.value: 0,
+    LineType.CUT.value: 1,
+    LineType.FOLD.value: 2,
+    LineType.SCORE.value: 3,
+    LineType.GLUE_FLAP.value: 4,
+    LineType.WINDOW.value: 5,
+}
+
+# Edge codes grouped for the convenience boolean attributes ``ps_fold`` /
+# ``ps_cut``. Creases (fold, score, glue flap) bend; cuts (outline, window)
+# form the physical silhouette that a bevel should round.
+FOLD_EDGE_CODES = frozenset(
+    {
+        EDGE_TYPE_CODES[LineType.FOLD.value],
+        EDGE_TYPE_CODES[LineType.SCORE.value],
+        EDGE_TYPE_CODES[LineType.GLUE_FLAP.value],
+    }
+)
+CUT_EDGE_CODES = frozenset(
+    {
+        EDGE_TYPE_CODES[LineType.CUT.value],
+        EDGE_TYPE_CODES[LineType.WINDOW.value],
+    }
+)
+
 # SVG user-unit table (90 dpi, matches Blender's io_curve_svg importer).
 SVG_DPI = 90.0
 SVG_UNITS = {

@@ -5,6 +5,17 @@ Todas as mudanças notáveis deste projeto são documentadas aqui.
 O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)
 e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [0.3.2] - 2026-07-25
+
+### Added
+- **Marcação de arestas na malha** para consumo não-destrutivo por Geometry
+  Nodes: cada painel agora carrega o atributo inteiro `ps_edge_type` (domínio
+  de aresta) mais os booleanos `ps_fold` e `ps_cut`. Vincos (fold/score/glue)
+  e cortes (outline/window) da matriz de faca são preservados na geometria sem
+  precisar "queimar" nada — base para um bével nodal futuro.
+- Constantes `EDGE_TYPE_CODES`, `FOLD_EDGE_CODES` e `CUT_EDGE_CODES` como fonte
+  única do mapeamento tipo-de-linha → código de aresta.
+
 ## [0.3.1] - 2026-07-24
 
 ### Added
@@ -109,6 +120,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Scaffolding inicial do addon: `__init__.py`, `blender_manifest.toml`,
   estrutura de diretórios e `build.py`.
 
+[0.3.2]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.3.2
 [0.3.1]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.3.1
 [0.3.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.3.0
 [0.2.3]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.2.3
