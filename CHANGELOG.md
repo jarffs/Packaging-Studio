@@ -5,6 +5,27 @@ Todas as mudanças notáveis deste projeto são documentadas aqui.
 O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)
 e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [0.3.0] - 2026-07-24
+
+### Added
+- **Fase 3 (início) — Animação de dobra**:
+  - Fold solver puro-Python (`core/fold_solver.py`): converte a topologia de dobra
+    num cronograma ordenado de dobras (`FoldPlan`/`FoldStep`) com ângulo alvo e
+    janela de frames por charneira.
+  - Sequenciamento em cascata por profundidade BFS: painéis mais profundos dobram
+    depois, montando a caixa do centro para fora.
+  - Baker de animação (`mesh/fold_anim.py`): insere keyframes por bone (plano →
+    dobrado) rotacionando no eixo X local, com suporte à API de *slotted actions*
+    do Blender 4.4+/5.x.
+  - Easing configurável: Linear, Smooth, Ease In, Ease Out, Ease In-Out, Bounce.
+  - Operador "Animate Fold" e controles no N-panel (ângulo, frames/dobra, cascata,
+    easing).
+  - Testes puro-Python do solver (cascata, profundidade, ângulo, casos-limite).
+
+### Notes
+- Deferido para próximas iterações: animação de tampa (3.4/3.8) e slider de preview
+  por driver (3.5).
+
 ## [0.2.3] - 2026-07-24
 
 ### Changed
@@ -76,6 +97,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Scaffolding inicial do addon: `__init__.py`, `blender_manifest.toml`,
   estrutura de diretórios e `build.py`.
 
+[0.3.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.3.0
 [0.2.3]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.2.3
 [0.2.2]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.2.2
 [0.2.1]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.2.1
