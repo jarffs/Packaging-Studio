@@ -114,6 +114,20 @@ class TopologyTests(unittest.TestCase):
         root_panel = next(p for p in model.panels if p.index == topo.root)
         self.assertAlmostEqual(root_panel.area, 15000.0, places=3)
 
+    def test_explicit_root_overrides_largest(self):
+        model = detect_panels(_two_panel_box())
+        indices = sorted(p.index for p in model.panels)
+        chosen = indices[-1]
+        topo = build_topology(model, root=chosen)
+        self.assertEqual(topo.root, chosen)
+        self.assertEqual(len(topo.joints), 1)
+        self.assertEqual(topo.joints[0].parent, chosen)
+
+    def test_invalid_root_falls_back_to_largest(self):
+        model = detect_panels(_two_panel_box())
+        topo = build_topology(model, root=999)
+        self.assertIn(topo.root, {p.index for p in model.panels})
+
     def test_strip_hierarchy_has_two_joints(self):
         outline = _line(
             [(0, 0), (300, 0), (300, 100), (0, 100)], LineType.CUT, closed=True

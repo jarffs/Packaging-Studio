@@ -49,6 +49,16 @@ class PACKAGING_PT_main(bpy.types.Panel):
         if props.box_collection:
             anim = layout.box()
             anim.label(text="Animation", icon="ARMATURE_DATA")
+
+            base = anim.column(align=True)
+            if props.fold_root_panel >= 0:
+                base.label(text=f"Base panel: {props.fold_root_panel}", icon="PINNED")
+            else:
+                base.label(text="Base panel: Auto (largest)", icon="AUTO")
+            row = base.row(align=True)
+            row.operator("packaging_studio.set_fold_base", icon="PINNED")
+            row.operator("packaging_studio.clear_fold_base", icon="X", text="")
+
             anim.prop(props, "fold_angle_deg")
             row = anim.row(align=True)
             row.prop(props, "fold_frames")

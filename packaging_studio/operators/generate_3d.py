@@ -61,6 +61,7 @@ class PACKAGING_OT_generate_3d(bpy.types.Operator):
 
         props.panel_count = len(model.panels)
         props.box_collection = box.name
+        props.fold_root_panel = -1
         _show_relationship_lines(context)
         self.report(
             {"INFO"},
