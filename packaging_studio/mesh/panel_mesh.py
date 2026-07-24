@@ -13,7 +13,12 @@ import bmesh
 import bpy
 
 from ..core.topology import build_topology
-from ..utils.constants import VIEWPORT_SCALE
+from ..utils.constants import (
+    CUT_EDGE_CODES,
+    EDGE_TYPE_CODES,
+    FOLD_EDGE_CODES,
+    VIEWPORT_SCALE,
+)
 from ..utils.geometry import bbox
 from .armature import build_armature
 
@@ -36,7 +41,7 @@ def build_3d(model, name, thickness_mm=0.3):
 
     for panel in model.panels:
         obj = _build_panel_object(
-            panel, model.vertices, thickness_m, s, bounds, name
+            panel, model.vertices, model.edge_types, thickness_m, s, bounds, name
         )
         box.objects.link(obj)
         _rig_panel(obj, arm_obj, bone_names[panel.index])
@@ -46,13 +51,23 @@ def build_3d(model, name, thickness_mm=0.3):
     return box
 
 
-def _build_panel_object(panel, vertices, thickness_m, scale, bounds, name):
+def _build_panel_object(panel, vertices, edge_types, thickness_m, scale, bounds, name):
     bm = bmesh.new()
     ring = [
         bm.verts.new((vertices[i][0] * scale, -vertices[i][1] * scale, 0.0))
         for i in panel.loop
     ]
     face = bm.faces.new(ring)
+
+    type_layer = bm.edges.layers.int.new("ps_edge_type")
+    count = len(panel.loop)
+    for i in range(count):
+        edge = bm.edges.get((ring[i], ring[(i + 1) % count]))
+        if edge is None:
+            continue
+        key = frozenset((panel.loop[i], panel.loop[(i + 1) % count]))
+        edge[type_layer] = EDGE_TYPE_CODES.get(edge_types.get(key), 0)
+
     bmesh.ops.solidify(bm, geom=[face], thickness=thickness_m)
     bm.normal_update()
 
@@ -60,8 +75,27 @@ def _build_panel_object(panel, vertices, thickness_m, scale, bounds, name):
     bm.to_mesh(mesh)
     bm.free()
 
+    _mark_edges(mesh)
     _assign_uv(mesh, scale, bounds)
     return bpy.data.objects.new(f"{name}_panel_{panel.index}", mesh)
+
+
+def _mark_edges(mesh):
+    """Add ``ps_fold`` / ``ps_cut`` boolean edge attributes for Geometry Nodes.
+
+    Derived from the ``ps_edge_type`` integer attribute so a non-destructive
+    bevel node group can select creases or the cut silhouette by name.
+    """
+    type_attr = mesh.attributes.get("ps_edge_type")
+    if type_attr is None:
+        return
+    codes = [item.value for item in type_attr.data]
+    fold_attr = mesh.attributes.new("ps_fold", "BOOLEAN", "EDGE")
+    cut_attr = mesh.attributes.new("ps_cut", "BOOLEAN", "EDGE")
+    for i, code in enumerate(codes):
+        fold_attr.data[i].value = code in FOLD_EDGE_CODES
+        cut_attr.data[i].value = code in CUT_EDGE_CODES
+
 
 
 def _assign_uv(mesh, scale, bounds):
