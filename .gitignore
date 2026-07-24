@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Blender extension build output
+*.zip
+.blender_ext/
+
+# Local debug / throwaway scripts
+check_panel.py
+diag_startup.py
+diag_*.py
+enable_persist*.py
+fix_repo.py
+validate_addon.py
+validate_extension_flow.py
+verify_fix.py
+verify_pdf.py
+_install.py
+_diag_*.py
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
