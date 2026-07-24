@@ -60,6 +60,7 @@ class PACKAGING_OT_generate_3d(bpy.types.Operator):
             return {"CANCELLED"}
 
         props.panel_count = len(model.panels)
+        props.box_collection = box.name
         _show_relationship_lines(context)
         self.report(
             {"INFO"},

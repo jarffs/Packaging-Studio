@@ -28,4 +28,40 @@ class PackagingStudioProperties(bpy.types.PropertyGroup):
         soft_max=5.0,
     )
     panel_count: bpy.props.IntProperty(name="Panels", default=0)
+    box_collection: bpy.props.StringProperty(name="Box collection", default="")
+
+    fold_angle_deg: bpy.props.FloatProperty(
+        name="Fold Angle",
+        description="Target fold angle for each hinge, in degrees",
+        default=90.0,
+        min=0.0,
+        max=180.0,
+    )
+    fold_frames: bpy.props.IntProperty(
+        name="Frames / Fold",
+        description="How many frames each hinge takes to fold",
+        default=20,
+        min=1,
+        soft_max=120,
+    )
+    fold_cascade: bpy.props.IntProperty(
+        name="Cascade Offset",
+        description="Frame delay added per hierarchy level for the cascade effect",
+        default=5,
+        min=0,
+        soft_max=60,
+    )
+    fold_easing: bpy.props.EnumProperty(
+        name="Easing",
+        description="Interpolation used for the fold animation",
+        items=[
+            ("LINEAR", "Linear", "Constant speed"),
+            ("SMOOTH", "Smooth", "Bezier ease in and out"),
+            ("EASE_IN", "Ease In", "Start slow"),
+            ("EASE_OUT", "Ease Out", "End slow"),
+            ("EASE_IN_OUT", "Ease In-Out", "Slow at both ends"),
+            ("BOUNCE", "Bounce", "Bounce at the end"),
+        ],
+        default="SMOOTH",
+    )
 

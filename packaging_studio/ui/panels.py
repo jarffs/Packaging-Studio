@@ -45,3 +45,13 @@ class PACKAGING_PT_main(bpy.types.Panel):
         gen.operator("packaging_studio.generate_3d", icon="MOD_SOLIDIFY")
         if props.panel_count:
             gen.label(text=f"Panels: {props.panel_count}")
+
+        if props.box_collection:
+            anim = layout.box()
+            anim.label(text="Animation", icon="ARMATURE_DATA")
+            anim.prop(props, "fold_angle_deg")
+            row = anim.row(align=True)
+            row.prop(props, "fold_frames")
+            row.prop(props, "fold_cascade")
+            anim.prop(props, "fold_easing")
+            anim.operator("packaging_studio.animate_fold", icon="PLAY")
