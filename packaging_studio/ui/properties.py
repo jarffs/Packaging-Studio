@@ -6,19 +6,18 @@ import bpy
 
 
 def _sync_finish(self, context):
-    """Push the SubD finishing sliders onto every panel modifier live."""
+    """Push the edge finishing sliders onto every panel modifier live."""
     collection = bpy.data.collections.get(self.box_collection)
     if collection is None:
         return
-    from ..mesh.geometry_nodes import sync_collection
+    from ..mesh.finishing import sync_collection
 
     sync_collection(
         collection,
-        enable=self.subd_enable,
-        level=self.subd_level,
-        width=self.support_width,
-        loops=self.support_loops,
-        crease=self.crease_sharpness,
+        enable=self.finish_enable,
+        width=self.bevel_width,
+        segments=self.bevel_segments,
+        subd_level=self.subd_level,
     )
 
 
@@ -87,46 +86,38 @@ class PackagingStudioProperties(bpy.types.PropertyGroup):
         default="SMOOTH",
     )
 
-    subd_enable: bpy.props.BoolProperty(
-        name="SubD Finish",
-        description="Non-destructive Subdivision Surface finish with support loops",
+    finish_enable: bpy.props.BoolProperty(
+        name="Edge Finish",
+        description="Non-destructive rounded-edge bevel (and optional Subdivision Surface)",
         default=True,
         update=_sync_finish,
     )
-    subd_level: bpy.props.IntProperty(
-        name="SubD Level",
-        description="Subdivision Surface level applied by the finishing modifier",
-        default=2,
-        min=0,
-        soft_max=4,
-        max=6,
-        update=_sync_finish,
-    )
-    support_width: bpy.props.FloatProperty(
-        name="Support Width",
-        description="Distance of the crease support loops (holds the fold sharp)",
-        default=0.0006,
+    bevel_width: bpy.props.FloatProperty(
+        name="Edge Round",
+        description="Bevel width that rounds the panel edges",
+        default=0.0003,
         min=0.0,
-        soft_max=0.005,
+        soft_max=0.003,
         max=0.02,
         subtype="DISTANCE",
         update=_sync_finish,
     )
-    support_loops: bpy.props.IntProperty(
-        name="Support Loops",
-        description="How many support loops the bevel adds along each crease",
-        default=1,
+    bevel_segments: bpy.props.IntProperty(
+        name="Round Segments",
+        description="Bevel segments (higher = smoother rounded edge)",
+        default=2,
         min=1,
-        max=4,
+        max=8,
         update=_sync_finish,
     )
-    crease_sharpness: bpy.props.FloatProperty(
-        name="Crease Sharpness",
-        description="Extra SubD edge crease on the fold edges (0 = off)",
-        default=0.0,
-        min=0.0,
-        max=1.0,
-        subtype="FACTOR",
+    subd_level: bpy.props.IntProperty(
+        name="SubD Level",
+        description="Optional Subdivision Surface level (0 = off; note: SubD "
+        "rounds and shrinks these hard-surface panels)",
+        default=0,
+        min=0,
+        soft_max=3,
+        max=6,
         update=_sync_finish,
     )
 

@@ -49,14 +49,15 @@ class PACKAGING_PT_main(bpy.types.Panel):
         if props.box_collection:
             finish = layout.box()
             header = finish.row(align=True)
-            header.label(text="Finishing (SubD)", icon="MOD_SUBSURF")
-            header.prop(props, "subd_enable", text="")
+            header.label(text="Finishing", icon="MOD_BEVEL")
+            header.prop(props, "finish_enable", text="")
             col = finish.column(align=True)
-            col.enabled = props.subd_enable
+            col.enabled = props.finish_enable
+            col.prop(props, "bevel_width")
+            col.prop(props, "bevel_segments")
             col.prop(props, "subd_level")
-            col.prop(props, "support_width")
-            col.prop(props, "support_loops")
-            col.prop(props, "crease_sharpness")
+            if props.subd_level > 0:
+                col.label(text="SubD rounds hard-surface panels", icon="INFO")
 
         if props.box_collection:
             anim = layout.box()
