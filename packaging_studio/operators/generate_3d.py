@@ -83,14 +83,13 @@ def _show_relationship_lines(context):
 
 
 def _apply_finish(box, props):
-    """Sync the SubD finishing sliders onto the freshly built panels."""
-    from ..mesh.geometry_nodes import sync_collection
+    """Sync the edge finishing sliders onto the freshly built panels."""
+    from ..mesh.finishing import sync_collection
 
     sync_collection(
         box,
-        enable=props.subd_enable,
-        level=props.subd_level,
-        width=props.support_width,
-        loops=props.support_loops,
-        crease=props.crease_sharpness,
+        enable=props.finish_enable,
+        width=props.bevel_width,
+        segments=props.bevel_segments,
+        subd_level=props.subd_level,
     )

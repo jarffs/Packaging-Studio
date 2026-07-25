@@ -21,7 +21,7 @@ from ..utils.constants import (
 )
 from ..utils.geometry import bbox
 from .armature import build_armature
-from .geometry_nodes import apply_subd_support
+from .finishing import apply_finish
 
 
 def build_3d(model, name, thickness_mm=0.3):
@@ -46,7 +46,7 @@ def build_3d(model, name, thickness_mm=0.3):
         )
         box.objects.link(obj)
         _rig_panel(obj, arm_obj, bone_names[panel.index])
-        apply_subd_support(obj)
+        apply_finish(obj)
         if material is not None:
             obj.data.materials.append(material)
 

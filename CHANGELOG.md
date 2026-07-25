@@ -5,6 +5,23 @@ Todas as mudanças notáveis deste projeto são documentadas aqui.
 O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)
 e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [0.4.1] - 2026-07-25
+
+### Fixed
+- **Acabamento derretia/inchava os painéis**: o Subdivision Surface via Geometry
+  Nodes contraía a silhueta dos painéis (~30%) porque são sólidos hard-surface
+  grosseiros — Catmull-Clark é a ferramenta errada para eles. Substituído por um
+  **bevel de arredondamento de arestas** confiável (limitado por ângulo), com o
+  Subdivision Surface **opcional e desligado por padrão**. Silhueta preservada
+  (ratio 1.000, validado headless).
+
+### Changed
+- `mesh/geometry_nodes.py` → `mesh/finishing.py`: o acabamento agora usa
+  modificadores **Bevel + Subsurf** (props diretáveis pelos sliders) em vez do
+  node group `PS_SubD_Support`.
+- Sliders do painel "Finishing": arredondamento de aresta (largura), segmentos e
+  nível de SubD opcional (com aviso de que o SubD arredonda painéis hard-surface).
+
 ## [0.4.0] - 2026-07-25
 
 ### Added
@@ -139,6 +156,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Scaffolding inicial do addon: `__init__.py`, `blender_manifest.toml`,
   estrutura de diretórios e `build.py`.
 
+[0.4.1]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.4.1
 [0.4.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.4.0
 [0.3.2]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.3.2
 [0.3.1]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.3.1
