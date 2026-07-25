@@ -7,9 +7,10 @@ Builds a reusable ``PS_SubD_Support`` node group that:
 2. applies **Subdivision Surface** on top.
 
 Because the support loops only ever exist inside the modifier, the base panel
-mesh stays flat and editable — nothing is "baked" into the geometry. The group
-exposes sliders (SubD level, support width, support loops, crease sharpness) so
-the user tunes the finish interactively from the modifier panel.
+mesh stays flat and editable — nothing is "baked" into the geometry. The
+tunable parameters (SubD level, support width, support loops, crease sharpness)
+live on internal value nodes of the shared group and are driven by the sidebar
+sliders, so a single change updates every panel live.
 """
 
 from __future__ import annotations
