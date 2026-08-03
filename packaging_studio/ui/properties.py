@@ -21,6 +21,26 @@ def _sync_finish(self, context):
     )
 
 
+# Kept referenced so Blender doesn't free the dynamic enum item strings.
+_fold_base_items = [("-1", "Auto (largest)", "Use the largest panel as the base")]
+
+
+def _fold_base_enum(self, context):
+    items = [("-1", "Auto (largest)", "Use the largest panel as the static base")]
+    for index in range(self.panel_count):
+        items.append((str(index), f"Panel {index}", f"Panel {index} stays static"))
+    _fold_base_items[:] = items
+    return _fold_base_items
+
+
+def _fold_base_update(self, context):
+    """Sync the numeric base index and re-root the rig on the chosen panel."""
+    self.fold_root_panel = int(self.fold_base)
+    from ..operators.animate_fold import reroot_rig
+
+    reroot_rig(self)
+
+
 class PackagingStudioProperties(bpy.types.PropertyGroup):
     source_file: bpy.props.StringProperty(name="Source", default="")
     source_path: bpy.props.StringProperty(name="Source path", default="", subtype="FILE_PATH")
@@ -49,6 +69,12 @@ class PackagingStudioProperties(bpy.types.PropertyGroup):
         name="Base Panel",
         description="Panel index that stays static; -1 uses the largest panel",
         default=-1,
+    )
+    fold_base: bpy.props.EnumProperty(
+        name="Base Panel",
+        description="Which panel stays static while the rest fold around it",
+        items=_fold_base_enum,
+        update=_fold_base_update,
     )
 
     fold_angle_deg: bpy.props.FloatProperty(

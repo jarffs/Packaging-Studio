@@ -5,6 +5,21 @@ Todas as mudanças notáveis deste projeto são documentadas aqui.
 O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)
 e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [0.5.0] - 2026-08-03
+
+### Changed
+- **Malha única**: "Generate 3D" agora produz **um único objeto de malha** para
+  a caixa inteira, em vez de um objeto por painel. Cada painel é uma ilha
+  disjunta pesada ao seu bone (`panel_{index}` vertex group), então a dobra
+  continua correta com um único modificador Armature. Facilita seleção,
+  materiais e o acabamento (bevel/subsurf num só lugar).
+- **Menu do painel base**: como não há mais objetos por painel para selecionar,
+  a escolha do painel estático virou um **dropdown** ("Base") com "Auto
+  (largest)" + "Panel N". Escolher um item **re-enraíza o rig ao vivo**.
+
+### Removed
+- Operadores "Set Base from Selection" e "Auto Base" (substituídos pelo menu).
+
 ## [0.4.1] - 2026-07-25
 
 ### Fixed
@@ -156,6 +171,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Scaffolding inicial do addon: `__init__.py`, `blender_manifest.toml`,
   estrutura de diretórios e `build.py`.
 
+[0.5.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.5.0
 [0.4.1]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.4.1
 [0.4.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.4.0
 [0.3.2]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.3.2

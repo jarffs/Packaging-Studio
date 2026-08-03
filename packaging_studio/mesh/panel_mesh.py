@@ -1,13 +1,15 @@
 """Build the solid 3D box mesh from a detected :class:`PanelModel`.
 
-Each panel becomes a separate solid object made of an n-gon face extruded to
-the material thickness. Solidify produces quad side walls and n-gon caps — the
-mesh is intentionally **quad-only, never triangulated**. Panels are rigged to a
-fold armature via a single full-weight vertex group each, so they fold cleanly
-in later phases.
+All panels are welded into a **single mesh object**: each panel is a solid
+n-gon (extruded to the material thickness) built as its own disjoint island so
+it can fold independently. Every island's vertices are weighted to one fold
+bone via a ``panel_{index}`` vertex group, so the single Armature modifier folds
+the whole box. The mesh is intentionally **quad-only, never triangulated**.
 """
 
 from __future__ import annotations
+
+from collections import defaultdict
 
 import bmesh
 import bpy
@@ -38,48 +40,55 @@ def build_3d(model, name, thickness_mm=0.3):
     arm_obj, bone_names = build_armature(model, topology, name, box)
 
     bounds = bbox(model.vertices) if model.vertices else (0.0, 0.0, 1.0, 1.0)
-    material = _material(name)
 
-    for panel in model.panels:
-        obj = _build_panel_object(
-            panel, model.vertices, model.edge_types, thickness_m, s, bounds, name
-        )
-        box.objects.link(obj)
-        _rig_panel(obj, arm_obj, bone_names[panel.index])
-        apply_finish(obj)
-        if material is not None:
-            obj.data.materials.append(material)
+    obj = _build_box_object(model, thickness_m, s, bounds, name)
+    box.objects.link(obj)
+    _rig_box(obj, arm_obj, bone_names)
+    apply_finish(obj)
+
+    material = _material(name)
+    if material is not None:
+        obj.data.materials.append(material)
 
     return box
 
 
-def _build_panel_object(panel, vertices, edge_types, thickness_m, scale, bounds, name):
+def _build_box_object(model, thickness_m, scale, bounds, name):
+    """Build every panel as a disjoint island of a single mesh object."""
     bm = bmesh.new()
-    ring = [
-        bm.verts.new((vertices[i][0] * scale, -vertices[i][1] * scale, 0.0))
-        for i in panel.loop
-    ]
-    face = bm.faces.new(ring)
-
+    panel_layer = bm.verts.layers.int.new("ps_panel")
     type_layer = bm.edges.layers.int.new("ps_edge_type")
-    count = len(panel.loop)
-    for i in range(count):
-        edge = bm.edges.get((ring[i], ring[(i + 1) % count]))
-        if edge is None:
-            continue
-        key = frozenset((panel.loop[i], panel.loop[(i + 1) % count]))
-        edge[type_layer] = EDGE_TYPE_CODES.get(edge_types.get(key), 0)
 
-    bmesh.ops.solidify(bm, geom=[face], thickness=thickness_m)
+    for panel in model.panels:
+        ring = [
+            bm.verts.new((model.vertices[i][0] * scale, -model.vertices[i][1] * scale, 0.0))
+            for i in panel.loop
+        ]
+        for vert in ring:
+            vert[panel_layer] = panel.index
+        face = bm.faces.new(ring)
+
+        count = len(panel.loop)
+        for i in range(count):
+            edge = bm.edges.get((ring[i], ring[(i + 1) % count]))
+            if edge is None:
+                continue
+            key = frozenset((panel.loop[i], panel.loop[(i + 1) % count]))
+            edge[type_layer] = EDGE_TYPE_CODES.get(model.edge_types.get(key), 0)
+
+        result = bmesh.ops.solidify(bm, geom=[face], thickness=thickness_m)
+        for element in result["geom"]:
+            if isinstance(element, bmesh.types.BMVert):
+                element[panel_layer] = panel.index
+
     bm.normal_update()
-
-    mesh = bpy.data.meshes.new(f"{name}_panel_{panel.index}")
+    mesh = bpy.data.meshes.new(name)
     bm.to_mesh(mesh)
     bm.free()
 
     _mark_edges(mesh)
     _assign_uv(mesh, scale, bounds)
-    return bpy.data.objects.new(f"{name}_panel_{panel.index}", mesh)
+    return bpy.data.objects.new(name, mesh)
 
 
 def _mark_edges(mesh):
@@ -112,9 +121,21 @@ def _assign_uv(mesh, scale, bounds):
         uv_layer.data[loop.index].uv = (u, v)
 
 
-def _rig_panel(obj, arm_obj, bone):
-    group = obj.vertex_groups.new(name=bone)
-    group.add(range(len(obj.data.vertices)), 1.0, "REPLACE")
+def _rig_box(obj, arm_obj, bone_names):
+    """Weight each panel island to its bone and add one Armature modifier."""
+    verts_by_panel = defaultdict(list)
+    attr = obj.data.attributes.get("ps_panel")
+    if attr is not None:
+        for index, item in enumerate(attr.data):
+            verts_by_panel[item.value].append(index)
+
+    for panel_index, vert_ids in verts_by_panel.items():
+        bone = bone_names.get(panel_index)
+        if bone is None:
+            continue
+        group = obj.vertex_groups.new(name=bone)
+        group.add(vert_ids, 1.0, "REPLACE")
+
     modifier = obj.modifiers.new("Fold", "ARMATURE")
     modifier.object = arm_obj
     obj.parent = arm_obj
