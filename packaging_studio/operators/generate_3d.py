@@ -54,7 +54,12 @@ class PACKAGING_OT_generate_3d(bpy.types.Operator):
             return {"CANCELLED"}
 
         name = os.path.splitext(os.path.basename(path))[0]
-        box = build_3d(model, name, thickness_mm=props.thickness_mm)
+        box = build_3d(
+            model,
+            name,
+            thickness_mm=props.thickness_mm,
+            crease_width_mm=props.crease_width_mm,
+        )
         if box is None:
             self.report({"WARNING"}, "Could not build a fold hierarchy.")
             return {"CANCELLED"}

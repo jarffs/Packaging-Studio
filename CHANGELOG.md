@@ -5,6 +5,22 @@ Todas as mudanças notáveis deste projeto são documentadas aqui.
 O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)
 e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [0.6.0] - 2026-08-03
+
+### Added
+- **Linhas de sustentação (vincos)**: a caixa 3D agora é uma **malha conectada**
+  (painéis adjacentes compartilham os vértices do vinco) e cada aresta de dobra
+  é biselada para criar **loops de sustentação** paralelos ao vinco, como no
+  fluxo manual. Os vértices do vinco pertencem a dois painéis, então o peso
+  mesclado forma uma dobradiça suave enquanto os loops mantêm os painéis planos.
+- Slider **"Crease Width (mm)"** no painel "3D Model" controla a largura dos
+  loops (0 = desliga).
+
+### Changed
+- A malha deixou de ser ilhas disjuntas por painel: agora é uma superfície
+  conectada única, com a dobra ainda dirigida por um só modificador Armature
+  (pesagem por vértice resolvida geometricamente por painel).
+
 ## [0.5.0] - 2026-08-03
 
 ### Changed
@@ -171,6 +187,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Scaffolding inicial do addon: `__init__.py`, `blender_manifest.toml`,
   estrutura de diretórios e `build.py`.
 
+[0.6.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.6.0
 [0.5.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.5.0
 [0.4.1]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.4.1
 [0.4.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.4.0
