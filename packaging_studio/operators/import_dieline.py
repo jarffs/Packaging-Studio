@@ -1,7 +1,5 @@
 """File > Import operator for SVG/PDF packaging dielines."""
 
-from __future__ import annotations
-
 import os
 
 import bpy
