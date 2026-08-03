@@ -5,6 +5,17 @@ Todas as mudanças notáveis deste projeto são documentadas aqui.
 O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)
 e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [0.6.1] - 2026-08-03
+
+### Fixed
+- **Falha ao ativar em Blender 5.1.2** (`module '...ui.properties' has no
+  attribute 'PackagingStudioProperties'`). Removido `from __future__ import
+  annotations` dos arquivos que definem classes do Blender com anotações de
+  propriedade (`ui/properties.py`, `operators/import_dieline.py`): com aquela
+  import as anotações viram strings e versões anteriores à 5.2 não as avaliam no
+  `register_class`, quebrando o registro. Agora as propriedades são objetos
+  reais, registrados igual em todas as versões.
+
 ## [0.6.0] - 2026-08-03
 
 ### Added
@@ -187,6 +198,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Scaffolding inicial do addon: `__init__.py`, `blender_manifest.toml`,
   estrutura de diretórios e `build.py`.
 
+[0.6.1]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.6.1
 [0.6.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.6.0
 [0.5.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.5.0
 [0.4.1]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.4.1

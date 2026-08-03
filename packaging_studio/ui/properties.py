@@ -1,7 +1,5 @@
 """Scene-level properties that store the last imported dieline's statistics."""
 
-from __future__ import annotations
-
 import bpy
 
 
