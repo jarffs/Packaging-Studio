@@ -63,6 +63,14 @@ class PackagingStudioProperties(bpy.types.PropertyGroup):
         max=20.0,
         soft_max=5.0,
     )
+    crease_width_mm: bpy.props.FloatProperty(
+        name="Crease Width (mm)",
+        description="Width of the baked support loops along each fold (0 = none)",
+        default=1.5,
+        min=0.0,
+        soft_max=5.0,
+        max=20.0,
+    )
     panel_count: bpy.props.IntProperty(name="Panels", default=0)
     box_collection: bpy.props.StringProperty(name="Box collection", default="")
     fold_root_panel: bpy.props.IntProperty(

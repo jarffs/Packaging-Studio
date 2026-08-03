@@ -42,6 +42,7 @@ class PACKAGING_PT_main(bpy.types.Panel):
         gen = layout.box()
         gen.label(text="3D Model", icon="MESH_CUBE")
         gen.prop(props, "thickness_mm")
+        gen.prop(props, "crease_width_mm")
         gen.operator("packaging_studio.generate_3d", icon="MOD_SOLIDIFY")
         if props.panel_count:
             gen.label(text=f"Panels: {props.panel_count}")

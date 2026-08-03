@@ -11,7 +11,7 @@ from __future__ import annotations
 bl_info = {
     "name": "Packaging Studio",
     "author": "jarffs",
-    "version": (0, 5, 0),
+    "version": (0, 6, 0),
     "blender": (4, 2, 0),
     "location": "File > Import > Dieline (SVG/PDF); View3D > Sidebar > Packaging",
     "description": "Turn packaging dielines into render-ready 3D models",
