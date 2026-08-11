@@ -1,0 +1,42 @@
+name: Build Add-on
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Cache Blender
+        uses: actions/cache@v4
+        id: cache-blender
+        with:
+          path: ./blender-4.2.0-linux-x64
+          key: blender-4.2.0-linux-x64
+          
+      - name: Download Blender 4.2
+        if: steps.cache-blender.outputs.cache-hit != 'true'
+        run: |
+          curl -L -o blender.tar.xz https://download.blender.org/release/Blender4.2/blender-4.2.0-linux-x64.tar.xz
+          tar -xf blender.tar.xz
+          
+      - name: Add Blender to PATH
+        run: echo "${PWD}/blender-4.2.0-linux-x64" >> $GITHUB_PATH
+
+      - name: Build Extension
+        run: |
+          blender -b -P packaging_studio/build.py
+          
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: packaging-studio-build
+          path: "*.zip"

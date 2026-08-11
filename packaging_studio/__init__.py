@@ -11,7 +11,7 @@ from __future__ import annotations
 bl_info = {
     "name": "Packaging Studio",
     "author": "jarffs",
-    "version": (0, 2, 3),
+    "version": (0, 6, 1),
     "blender": (4, 2, 0),
     "location": "File > Import > Dieline (SVG/PDF); View3D > Sidebar > Packaging",
     "description": "Turn packaging dielines into render-ready 3D models",
@@ -24,7 +24,7 @@ _registered_classes = []
 def register():
     import bpy
 
-    from .operators import generate_3d, import_dieline
+    from .operators import animate_fold, generate_3d, import_dieline
     from .ui import panels, properties
 
     global _registered_classes
@@ -32,6 +32,7 @@ def register():
         properties.PackagingStudioProperties,
         import_dieline.PACKAGING_OT_import_dieline,
         generate_3d.PACKAGING_OT_generate_3d,
+        animate_fold.PACKAGING_OT_animate_fold,
         panels.PACKAGING_PT_main,
     ]
     for cls in _registered_classes:

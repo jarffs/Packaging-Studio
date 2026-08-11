@@ -26,13 +26,38 @@ def _p3(x, y, s):
 
 def build_armature(model, topology, name, collection):
     """Create an armature for ``topology`` and return ``(object, {panel: bone})``."""
-    s = VIEWPORT_SCALE
-    root_len = s * 30.0  # 30 mm marker bone for panels without a hinge
-    min_len = s * 10.0
-
     arm_data = bpy.data.armatures.new(f"Rig_{name}")
     arm_obj = bpy.data.objects.new(f"Rig_{name}", arm_data)
     collection.objects.link(arm_obj)
+
+    names = _populate_bones(arm_obj, model, topology)
+
+    # Make the fold hierarchy easy to read in the viewport.
+    arm_data.show_names = True
+    arm_data.display_type = "OCTAHEDRAL"
+    arm_obj.show_in_front = True
+
+    return arm_obj, names
+
+
+def rebuild_bones(arm_obj, model, topology):
+    """Re-create ``arm_obj``'s bones for a new ``topology`` (e.g. a new base).
+
+    Bone names stay ``panel_{index}`` so mesh vertex-group bindings are kept;
+    only the head/tail placement and parent hierarchy change to re-root the rig
+    on ``topology.root``. Any existing pose animation is cleared.
+    """
+    if arm_obj.animation_data and arm_obj.animation_data.action:
+        arm_obj.animation_data_clear()
+    return _populate_bones(arm_obj, model, topology, clear=True)
+
+
+def _populate_bones(arm_obj, model, topology, clear=False):
+    """(Re)build the edit bones of ``arm_obj`` from ``topology``."""
+    s = VIEWPORT_SCALE
+    root_len = s * 30.0  # 30 mm marker bone for panels without a hinge
+    min_len = s * 10.0
+    arm_data = arm_obj.data
 
     view_layer = bpy.context.view_layer
     prev_active = view_layer.objects.active
@@ -40,6 +65,10 @@ def build_armature(model, topology, name, collection):
     bpy.ops.object.mode_set(mode="EDIT")
 
     edit_bones = arm_data.edit_bones
+    if clear:
+        for bone in list(edit_bones):
+            edit_bones.remove(bone)
+
     bones = {}
     panel_by_index = {p.index: p for p in model.panels}
 
@@ -94,10 +123,4 @@ def build_armature(model, topology, name, collection):
     if prev_active is not None:
         view_layer.objects.active = prev_active
 
-    # Make the fold hierarchy easy to read in the viewport.
-    arm_data.show_names = True
-    arm_data.display_type = "OCTAHEDRAL"
-    arm_obj.show_in_front = True
-
-    names = {index: bone_name(index) for index in bones}
-    return arm_obj, names
+    return {index: bone_name(index) for index in bones}

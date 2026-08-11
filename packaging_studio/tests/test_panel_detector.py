@@ -114,6 +114,20 @@ class TopologyTests(unittest.TestCase):
         root_panel = next(p for p in model.panels if p.index == topo.root)
         self.assertAlmostEqual(root_panel.area, 15000.0, places=3)
 
+    def test_explicit_root_overrides_largest(self):
+        model = detect_panels(_two_panel_box())
+        indices = sorted(p.index for p in model.panels)
+        chosen = indices[-1]
+        topo = build_topology(model, root=chosen)
+        self.assertEqual(topo.root, chosen)
+        self.assertEqual(len(topo.joints), 1)
+        self.assertEqual(topo.joints[0].parent, chosen)
+
+    def test_invalid_root_falls_back_to_largest(self):
+        model = detect_panels(_two_panel_box())
+        topo = build_topology(model, root=999)
+        self.assertIn(topo.root, {p.index for p in model.panels})
+
     def test_strip_hierarchy_has_two_joints(self):
         outline = _line(
             [(0, 0), (300, 0), (300, 100), (0, 100)], LineType.CUT, closed=True
@@ -130,6 +144,20 @@ class TopologyTests(unittest.TestCase):
         topo = build_topology(detect_panels([]))
         self.assertEqual(topo.root, -1)
         self.assertEqual(topo.joints, [])
+
+
+class EdgeCodeTests(unittest.TestCase):
+    def test_fold_and_cut_codes_are_disjoint(self):
+        from packaging_studio.utils.constants import CUT_EDGE_CODES, FOLD_EDGE_CODES
+
+        self.assertFalse(FOLD_EDGE_CODES & CUT_EDGE_CODES)
+        self.assertNotIn(0, FOLD_EDGE_CODES | CUT_EDGE_CODES)
+
+    def test_codes_cover_all_line_types(self):
+        from packaging_studio.utils.constants import EDGE_TYPE_CODES
+
+        for line_type in LineType:
+            self.assertIn(line_type.value, EDGE_TYPE_CODES)
 
 
 if __name__ == "__main__":

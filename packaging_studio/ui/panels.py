@@ -42,6 +42,33 @@ class PACKAGING_PT_main(bpy.types.Panel):
         gen = layout.box()
         gen.label(text="3D Model", icon="MESH_CUBE")
         gen.prop(props, "thickness_mm")
+        gen.prop(props, "crease_width_mm")
         gen.operator("packaging_studio.generate_3d", icon="MOD_SOLIDIFY")
         if props.panel_count:
             gen.label(text=f"Panels: {props.panel_count}")
+
+        if props.box_collection:
+            finish = layout.box()
+            header = finish.row(align=True)
+            header.label(text="Finishing", icon="MOD_BEVEL")
+            header.prop(props, "finish_enable", text="")
+            col = finish.column(align=True)
+            col.enabled = props.finish_enable
+            col.prop(props, "bevel_width")
+            col.prop(props, "bevel_segments")
+            col.prop(props, "subd_level")
+            if props.subd_level > 0:
+                col.label(text="SubD rounds hard-surface panels", icon="INFO")
+
+        if props.box_collection:
+            anim = layout.box()
+            anim.label(text="Animation", icon="ARMATURE_DATA")
+
+            anim.prop(props, "fold_base", text="Base")
+
+            anim.prop(props, "fold_angle_deg")
+            row = anim.row(align=True)
+            row.prop(props, "fold_frames")
+            row.prop(props, "fold_cascade")
+            anim.prop(props, "fold_easing")
+            anim.operator("packaging_studio.animate_fold", icon="PLAY")

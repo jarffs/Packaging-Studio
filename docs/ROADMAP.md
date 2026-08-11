@@ -11,7 +11,7 @@
 |------|------|----------|--------|
 | 1 | MVP | Importação de facas SVG/PDF + classificação automática de linhas | ✅ Concluído |
 | 2 | Geração 3D | Modelo 3D com espessura, armature e UV mapping | ✅ Concluído |
-| 3 | Animação | Dobra automática + animação de tampa | 🔲 Não iniciado |
+| 3 | Animação | Dobra automática + animação de tampa | � Em progresso |
 | 4 | Polish & UX | Drag-and-drop, presets, materiais PBR, preferências | 🔲 Não iniciado |
 | 5 | Avançado | Janelas, crash-lock, glTF, batch, ECMA | 🔲 Não iniciado |
 
@@ -90,15 +90,15 @@
 
 | # | Tarefa | Descrição | Deps | Status |
 |---|--------|-----------|------|--------|
-| 3.1 | Fold solver | Calcular ângulos finais de cada dobra (default 90°) com detecção de auto-interseção | Fase 2 | 🔲 |
-| 3.2 | Sequência de dobra | Determinar ordem de dobra via BFS com offsets de frames para efeito cascata | 3.1 | 🔲 |
-| 3.3 | Keyframes de dobra | Gerar keyframes para cada bone: frame 1 = flat, frame N = folded | 3.2 | 🔲 |
+| 3.1 | Fold solver | Calcular ângulos finais de cada dobra (default 90°) com detecção de auto-interseção | Fase 2 | � |
+| 3.2 | Sequência de dobra | Determinar ordem de dobra via BFS com offsets de frames para efeito cascata | 3.1 | ✅ |
+| 3.3 | Keyframes de dobra | Gerar keyframes para cada bone: frame 1 = flat, frame N = folded | 3.2 | ✅ |
 | 3.4 | Animação de tampa | Keyframes adicionais para abrir/fechar tampa após dobra | 3.3 | 🔲 |
 | 3.5 | Slider de preview | Custom property com driver que interpola todos os ângulos (0.0→1.0) | 3.3 | 🔲 |
-| 3.6 | Easing configurável | Seletor de interpolação: Linear, Bezier, Ease-in, Ease-out, Bounce | 3.3 | 🔲 |
-| 3.7 | Operador "Animate Fold" | Botão no N-panel | 3.1–3.6 | 🔲 |
+| 3.6 | Easing configurável | Seletor de interpolação: Linear, Bezier, Ease-in, Ease-out, Bounce | 3.3 | ✅ |
+| 3.7 | Operador "Animate Fold" | Botão no N-panel | 3.1–3.6 | ✅ |
 | 3.8 | Operador "Animate Lid" | Botão no N-panel | 3.4 | 🔲 |
-| 3.9 | Testes de animação | Verificar que os keyframes geram a dobra correta | 3.7 | 🔲 |
+| 3.9 | Testes de animação | Verificar que os keyframes geram a dobra correta | 3.7 | ✅ |
 
 ### Entregáveis
 - Animação automática de montagem
