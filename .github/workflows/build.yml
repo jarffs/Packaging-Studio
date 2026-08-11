@@ -2,9 +2,9 @@ name: Build Add-on
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "feature/phase-2-3d-generation" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "feature/phase-2-3d-generation" ]
   workflow_dispatch:
 
 jobs:
