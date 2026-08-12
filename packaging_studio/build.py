@@ -56,6 +56,24 @@ def download_whls(platforms, packages=required_packages, python_version="3.11"):
             f"--only-binary=:all: --python-version {python_version} "
             f"--platform {platform.pypi_suffix}"
         )
+import re
+
+def update_manifest_wheels():
+    whl_files = glob.glob(f"{WHL_PATH}/*.whl")
+    wheels_list = ',\n  '.join(f'"./wheels/{os.path.basename(w)}"' for w in whl_files)
+    
+    with open(TOML_PATH, 'r', encoding='utf-8') as f:
+        content = f.read()
+        
+    content = re.sub(
+        r'wheels\s*=\s*\[.*?\]',
+        f'wheels = [\n  {wheels_list}\n]',
+        content,
+        flags=re.DOTALL
+    )
+    
+    with open(TOML_PATH, 'w', encoding='utf-8') as f:
+        f.write(content)
 
 
 def build_extension(split: bool = True) -> None:
@@ -70,6 +88,7 @@ def build_extension(split: bool = True) -> None:
 
 def main():
     download_whls(build_platforms)
+    update_manifest_wheels()
     build_extension()
 
 
