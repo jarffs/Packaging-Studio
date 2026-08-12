@@ -25,3 +25,5 @@ wheels = [
 
 [permissions]
 files = "Import packaging dielines from local SVG/PDF files"
+
+platforms = ["windows-x64", "macos-arm64", "linux-x64"]
