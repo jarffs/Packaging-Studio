@@ -40,7 +40,7 @@ jobs:
       - name: Validate Built Extensions
         run: |
           for package in *.zip; do
-            blender -b --command extension validate --package "$package"
+            blender -b --command extension validate "$package"
           done
 
       - name: Upload Build Artifacts
