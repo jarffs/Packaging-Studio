@@ -23,7 +23,7 @@ wheels = [
   "./wheels/pymupdf-1.28.0-cp310-abi3-win_amd64.whl",
 ]
 
+platforms = ["windows-x64", "macos-arm64", "linux-x64"]
+
 [permissions]
 files = "Import packaging dielines from local SVG/PDF files"
-
-platforms = ["windows-x64", "macos-arm64", "linux-x64"]
