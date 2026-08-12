@@ -4,7 +4,6 @@ on:
   push:
     branches: [ "main", "feature/phase-2-3d-generation" ]
   pull_request:
-    branches: [ "main", "feature/phase-2-3d-generation" ]
   workflow_dispatch:
 
 jobs:
