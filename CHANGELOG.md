@@ -5,6 +5,12 @@ Todas as mudanças notáveis deste projeto são documentadas aqui.
 O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/)
 e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
+## [0.6.2] - 2026-08-13
+
+### Added
+- Release de correções e ajustes gerais.
+
+
 ## [0.6.1] - 2026-08-03
 
 ### Fixed
@@ -198,6 +204,7 @@ e o projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Scaffolding inicial do addon: `__init__.py`, `blender_manifest.toml`,
   estrutura de diretórios e `build.py`.
 
+[0.6.2]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.6.2
 [0.6.1]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.6.1
 [0.6.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.6.0
 [0.5.0]: https://github.com/jarffs/Packaging-Studio/releases/tag/v0.5.0
