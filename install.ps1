@@ -17,7 +17,7 @@ $isZip = $sourcePath.EndsWith(".zip")
 
 if ($isZip) {
     # Para zips como "packaging_studio-0.6.1.zip", extrair apenas "packaging_studio" como nome base (se necessário, adapte o regex)
-    $addonName = (Get-Item $sourcePath).BaseName -replace "-[\d\.]+$",""
+    $addonName = (Get-Item $sourcePath).BaseName -replace "-[\d\.]+.*$",""
 } else {
     $addonName = (Get-Item $sourcePath).Name
 }
